@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 
@@ -17,10 +14,16 @@ import java.time.LocalDate;
 public class Announce {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_announce")
+    private Long idAnnounce;
     private TypeAR typeAnnounce;
     private LocalDate date;
     private LocalDate startDate;
     private LocalDate endDate;
     private String image;
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    private AppUser appUser;
+    @OneToOne
+    private Reservation reservation;
 }

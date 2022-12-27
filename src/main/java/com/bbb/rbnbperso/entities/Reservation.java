@@ -5,22 +5,30 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_reservation")
+    private Long idReservation;
     private TypeAR typeReservation;
     private LocalDate date;
     private LocalDate startDate;
     private LocalDate endDate;
     private String image;
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    private AppUser appUser;
+    @OneToMany(targetEntity = Avis.class, mappedBy = "reservation")
+    private List<Avis> avisList = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "id_announce", nullable = false)
+    private Announce announce;
 }
