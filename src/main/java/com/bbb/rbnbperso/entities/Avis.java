@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -14,7 +15,7 @@ public class Avis {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String message;
-    private LocalDate date;
+    private LocalDateTime date;
     @ManyToOne
     @JoinColumn(name = "id_user",nullable = false)
     private AppUser appUser;

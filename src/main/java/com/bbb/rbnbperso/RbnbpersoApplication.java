@@ -37,7 +37,7 @@ public class RbnbpersoApplication {
 			appUserRepository.findAll().forEach(user ->{
 				Announce announce = new Announce();
 				announce.setTypeAnnounce(TypeAR.CHAMBRE);
-				announce.setDate(new LocalDate(2022,12,27));
+				announce.setDate(LocalDate.of(2022,12,27));
 			});
 		};
 	}

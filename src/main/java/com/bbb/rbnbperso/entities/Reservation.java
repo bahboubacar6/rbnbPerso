@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,9 +20,9 @@ public class Reservation {
     @Column(name = "id_reservation")
     private Long idReservation;
     private TypeAR typeReservation;
-    private LocalDate date;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime date;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String image;
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)

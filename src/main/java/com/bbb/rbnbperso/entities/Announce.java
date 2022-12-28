@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -17,13 +18,13 @@ public class Announce {
     @Column(name = "id_announce")
     private Long idAnnounce;
     private TypeAR typeAnnounce;
-    private LocalDate date;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime date;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String image;
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false)
     private AppUser appUser;
-    @OneToOne
+    @OneToOne(mappedBy = "announce")
     private Reservation reservation;
 }
