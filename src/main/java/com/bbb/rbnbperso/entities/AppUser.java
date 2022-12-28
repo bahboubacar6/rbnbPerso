@@ -1,5 +1,6 @@
 package com.bbb.rbnbperso.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,15 +21,18 @@ public class AppUser {
     private String email;
     private String username;
     private String password;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "AppUser_Role",
                 joinColumns = @JoinColumn(name = "id_user"),
                 inverseJoinColumns = @JoinColumn(name = "id_role"))
     private List<Role> roleList = new ArrayList<>();
     @OneToMany(targetEntity = Announce.class, mappedBy = "appUser")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Announce> announceList = new ArrayList<>();
     @OneToMany(targetEntity = Reservation.class, mappedBy = "appUser")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Reservation> reservationList = new ArrayList<>();
     @OneToMany(targetEntity = Avis.class, mappedBy = "appUser")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Avis> avisList = new ArrayList<>();
 }
