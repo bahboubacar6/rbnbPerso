@@ -1,5 +1,6 @@
 package com.bbb.rbnbperso;
 
+import com.bbb.rbnbperso.dtos.AppUserDTO;
 import com.bbb.rbnbperso.entities.Announce;
 import com.bbb.rbnbperso.entities.AppUser;
 import com.bbb.rbnbperso.enums.TypeAR;
@@ -21,17 +22,17 @@ public class RbnbpersoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RbnbpersoApplication.class, args);
 	}
-	@Bean
-	CommandLineRunner start2(GestationService gestationService) {
+	//@Bean
+	/*CommandLineRunner start2(GestationService gestationService) {
 		return arg -> {
 			Stream.of("Bart","Lisa","Omer").forEach(name->{
-				AppUser appUser = new AppUser();
-				appUser.setLastName(name);
-				appUser.setFirstName("Simpson");
-				appUser.setEmail(name+"@gmail.com");
-				appUser.setUsername(name+"5");
-				appUser.setPassword("1234");
-				gestationService.saveUser(appUser);
+				AppUserDTO appUserDTO = new AppUserDTO();
+                appUserDTO.setLastName(name);
+                appUserDTO.setFirstName("Simpson");
+                appUserDTO.setEmail(name+"@gmail.com");
+                appUserDTO.setUsername(name+"5");
+                appUserDTO.setPassword("1234");
+				gestationService.saveUser(appUserDTO);
 			});
 			gestationService.listUsers().forEach(user ->{
 				Announce announce = new Announce();
@@ -51,7 +52,7 @@ public class RbnbpersoApplication {
 				}
 			});
 		};
-	}
+	}*/
 
 	//@Bean
 	CommandLineRunner start(AppUserRepository appUserRepository,

@@ -27,12 +27,9 @@ public class AppUser {
                 inverseJoinColumns = @JoinColumn(name = "id_role"))
     private List<Role> roleList = new ArrayList<>();
     @OneToMany(targetEntity = Announce.class, mappedBy = "appUser")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Announce> announceList = new ArrayList<>();
     @OneToMany(targetEntity = Reservation.class, mappedBy = "appUser")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Reservation> reservationList = new ArrayList<>();
     @OneToMany(targetEntity = Avis.class, mappedBy = "appUser")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Avis> avisList = new ArrayList<>();
 }

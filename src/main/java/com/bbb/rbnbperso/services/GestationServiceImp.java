@@ -1,5 +1,7 @@
 package com.bbb.rbnbperso.services;
 
+import com.bbb.rbnbperso.dtos.AnnounceDTO;
+import com.bbb.rbnbperso.dtos.AppUserDTO;
 import com.bbb.rbnbperso.entities.Announce;
 import com.bbb.rbnbperso.entities.AppUser;
 import com.bbb.rbnbperso.entities.Reservation;
@@ -7,6 +9,7 @@ import com.bbb.rbnbperso.enums.TypeAR;
 import com.bbb.rbnbperso.exceptions.AnnounceNotFoundException;
 import com.bbb.rbnbperso.exceptions.ReservationNotFoundException;
 import com.bbb.rbnbperso.exceptions.UserNotFoundException;
+import com.bbb.rbnbperso.mappers.GestationMapperImp;
 import com.bbb.rbnbperso.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,16 +29,44 @@ public class GestationServiceImp implements GestationService {
     private AvisRepository avisRepository;
     private ReservationRepository reservationRepository;
     private RoleRepository roleRepository;
+    private GestationMapperImp dtoMappers;
 
     @Override
-    public AppUser saveUser(AppUser appUser) {
+    public AppUserDTO saveUser(AppUserDTO appUserDTO) {
         log.info("Saving User");
+        AppUser appUser = dtoMappers.fromAppUserDTO(appUserDTO);
         AppUser savedUser = appUserRepository.save(appUser);
-        return savedUser;
+        return dtoMappers.fromAppUser(savedUser);
     }
 
     @Override
-    public Announce saveAnnounce(TypeAR type, LocalDateTime date, LocalDateTime startDate, LocalDateTime endDate, String image, Long idUser) throws UserNotFoundException {
+    public AppUserDTO updateUser(AppUserDTO appUserDTO) {
+        log.info("Saving User");
+        AppUser appUser = dtoMappers.fromAppUserDTO(appUserDTO);
+        AppUser savedUser = appUserRepository.save(appUser);
+        return dtoMappers.fromAppUser(savedUser);
+    }
+    @Override
+    public void deleteAppUser(Long idUser){
+        appUserRepository.deleteById(idUser);
+    }
+
+    @Override
+    public List<AppUserDTO> listUsers() {
+        List<AppUser> userList = appUserRepository.findAll();
+        List<AppUserDTO> appUserDTOS = userList.stream().map(user -> dtoMappers.fromAppUser(user)).collect(Collectors.toList());
+        return appUserDTOS;
+    }
+
+    @Override
+    public AppUserDTO getUser(Long idUser) throws UserNotFoundException {
+        AppUser appUser = appUserRepository.findById(idUser).orElseThrow(()-> new UserNotFoundException("User Not Found"));
+        AppUserDTO appUserDTO = dtoMappers.fromAppUser(appUser);
+        return appUserDTO;
+    }
+
+    @Override
+    public AnnounceDTO saveAnnounce(TypeAR type, LocalDateTime date, LocalDateTime startDate, LocalDateTime endDate, String image, Long idUser) throws UserNotFoundException {
         AppUser user = appUserRepository.findById(idUser).orElse(null);
 
         if(user == null)
@@ -47,39 +79,53 @@ public class GestationServiceImp implements GestationService {
         announce.setImage(image);
         announce.setAppUser(user);
         Announce savedAnnounce = announceRepository.save(announce);
-        return savedAnnounce;
+        AnnounceDTO announceDTO = dtoMappers.fromAnnounce(savedAnnounce);
+        return announceDTO;
     }
 
     @Override
-    public List<AppUser> listUsers() {
-        return appUserRepository.findAll();
-    }
+    public AnnounceDTO updateAnnounce(TypeAR type, LocalDateTime date, LocalDateTime startDate, LocalDateTime endDate, String image, Long idUser) throws UserNotFoundException {
+        AppUser user = appUserRepository.findById(idUser).orElse(null);
 
-    @Override
-    public AppUser getUser(Long idUser) throws UserNotFoundException {
-        AppUser appUser = appUserRepository.findById(idUser).orElseThrow(()-> new UserNotFoundException("User Not Found"));
-        return appUser;
+        if(user == null)
+            throw new UserNotFoundException("User Not Found");
+        Announce announce = new Announce();
+        announce.setTypeAnnounce(type);
+        announce.setDate(date);
+        announce.setStartDate(startDate);
+        announce.setEndDate(endDate);
+        announce.setImage(image);
+        announce.setAppUser(user);
+        Announce savedAnnounce = announceRepository.save(announce);
+        AnnounceDTO announceDTO = dtoMappers.fromAnnounce(savedAnnounce);
+        return announceDTO;
     }
-
     @Override
-    public List<Announce> listAnnounces() {
-        return announceRepository.findAll();
+    public void deleteAnnounce(Long idAnnounce){
+         announceRepository.deleteById(idAnnounce);
     }
-
     @Override
-    public Announce getAnnounce(Long idAnnounce) throws AnnounceNotFoundException {
+    public AnnounceDTO getAnnounce(Long idAnnounce) throws AnnounceNotFoundException {
         Announce announce = announceRepository.findById(idAnnounce).orElseThrow(()->new AnnounceNotFoundException("Announce Not Found"));
-        return announce;
+        return dtoMappers.fromAnnounce(announce);
+    }
+    @Override
+    public List<AnnounceDTO> listAnnounces() {
+        List<Announce> announceList = announceRepository.findAll();
+        List<AnnounceDTO> announceDTOList = announceList.stream().map(announce -> dtoMappers.fromAnnounce(announce)).collect(Collectors.toList());
+        return announceDTOList;
     }
 
-    @Override
-    public List<Reservation> listReservations() {
-        return reservationRepository.findAll();
-    }
+
 
     @Override
     public Reservation getReservation(Long idReservation) throws ReservationNotFoundException {
         Reservation reservation = reservationRepository.findById(idReservation).orElseThrow(()->new ReservationNotFoundException("Reservation Not Found"));
         return reservation;
+    }
+
+    @Override
+    public List<Reservation> listReservations() {
+        return reservationRepository.findAll();
     }
 }
