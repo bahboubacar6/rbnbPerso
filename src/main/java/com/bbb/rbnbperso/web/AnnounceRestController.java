@@ -4,10 +4,7 @@ import com.bbb.rbnbperso.dtos.AnnounceDTO;
 import com.bbb.rbnbperso.exceptions.AnnounceNotFoundException;
 import com.bbb.rbnbperso.services.GestationService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,7 +26,17 @@ public class AnnounceRestController {
         return gestationService.getAnnounce(id);
     }
 
-    /*public AnnounceDTO saveAnnounce(AnnounceDTO announceDTO){
-        gestationService.saveAnnounce()
-    }*/
+    @PostMapping("/all")
+    public AnnounceDTO saveAnnounce(@RequestBody AnnounceDTO announceDTO){
+        return gestationService.saveAnnounce(announceDTO);
+    }
+    @PutMapping("/all/{id}")
+    public AnnounceDTO updateAnnounce(@PathVariable Long id, @RequestBody AnnounceDTO announceDTO){
+        announceDTO.setIdAnnounce(id);
+        return gestationService.updateAnnounce(announceDTO);
+    }
+    @DeleteMapping("/all/{id}")
+    public void deleteAnnounce(@PathVariable Long id){
+        gestationService.deleteAnnounce(id);
+    }
 }

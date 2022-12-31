@@ -16,6 +16,7 @@ public class Announce {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_announce")
     private Long idAnnounce;
+    @Enumerated(EnumType.STRING)
     private TypeAR typeAnnounce;
     private LocalDateTime date;
     private LocalDateTime startDate;

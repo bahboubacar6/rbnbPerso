@@ -17,6 +17,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_reservation")
     private Long idReservation;
+    @Enumerated(EnumType.STRING)
     private TypeAR typeReservation;
     private LocalDateTime date;
     private LocalDateTime startDate;
